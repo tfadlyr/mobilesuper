@@ -1,0 +1,190 @@
+{
+  "scheme": "kkp",
+  "name": "Dev SuperApps KKP",
+  "slug": "devsuperapps",
+  "version": "0.2.6",
+  "icon": "./assets/superApp/kkp-icon.png",
+  "userInterfaceStyle": "automatic",
+  "splash": {
+    "image": "./assets/superApp/splashkkp.png",
+    "resizeMode": "cover",
+    "backgroundColor": "#ffffff"
+  },
+  "updates": {
+    "fallbackToCacheTimeout": 0
+  },
+  "assetBundlePatterns": ["/*"],
+  "ios": {
+    "buildNumber": "0.1.7",
+    "supportsTablet": true,
+    "bundleIdentifier": "go.id.kkp.portal.dev",
+    "infoPlist": {
+      "NSPhotoLibraryUsageDescription": "Our app needs access to your photo library",
+      "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to access your camera",
+      "NSCrossWebsiteTrackingUsageDescription": "Allow authentication and device trackers"
+    }
+  },
+  "android": {
+    "versionCode": 2,
+    "enableHermes": true,
+    "notification": {
+      "icon": "./assets/ic_stat_onesignal_default.png",
+      "color": "#323247"
+    },
+    "permissions": [
+      "WRITE_EXTERNAL_STORAGE",
+      "READ_EXTERNAL_STORAGE",
+      "CAMERA",
+      "INTERNET",
+      "ACCESS_FINE_LOCATION",
+      "ACCESS_COARSE_LOCATION"
+    ],
+    "adaptiveIcon": {
+      "foregroundImage": "./assets/superApp/kkp-icon.png",
+      "backgroundColor": "#FFFFFF"
+    },
+    "package": "go.id.kkp.portal.dev",
+    "intentFilters": [
+      {
+        "action": "VIEW",
+        "autoVerify": true,
+        "data": [
+          {
+            "scheme": "https",
+            "host": "portal.kkp.go.id",
+            "pathPrefix": "/apps/KnowledgeManagement/detail/:id/:id_user"
+          }
+        ],
+        "category": ["BROWSABLE", "DEFAULT"]
+      }
+    ]
+  },
+  "web": {
+    "favicon": "./assets/favicon.png"
+  },
+  "plugins": [
+    "@config-plugins/react-native-blob-util",
+    "@config-plugins/react-native-pdf",
+    [
+      "expo-build-properties",
+      {
+        "android": {
+          "compileSdkVersion": 34,
+          "targetSdkVersion": 34,
+          "buildToolsVersion": "34.0.0",
+          "useLegacyPackaging": true,
+          "enableProguardInReleaseBuilds": true,
+          "enableShrinkResourcesInReleaseBuilds": true,
+          "minifyEnabled": true,
+          "shrinkResources": true,
+          "splits": {
+            "abi": true
+          },
+          "jsEngine": "hermes"
+        },
+        "ios": {
+          "deploymentTarget": "13.4"
+        }
+      }
+    ],
+    [
+      "expo-barcode-scanner",
+      {
+        "cameraPermission": "Allow $(PRODUCT_NAME) to access camera."
+      }
+    ],
+    [
+      "@sentry/react-native/expo",
+      {
+        "url": "https://sentry.armsolusi.com",
+        "note": "afc791465b7811efae970242ac120024",
+        "project": "kkp-superapps-dev",
+        "organization": "sentry"
+      }
+    ],
+    [
+      "onesignal-expo-plugin",
+      {
+        "mode": "development",
+        "smallIcons": ["./assets/ic_stat_onesignal_default.png"],
+        "smallIconAccentColor": "#323247"
+      }
+    ]
+  ],
+  "extra": {
+    "sentry_dsn": "https://594a72227e404b37ab17400a4c6fd7a3@newsentry.armsolusi.com/57",
+    "oneSignalAppId": "cf6dc0fa-3c36-4f98-a9a3-c760a0efa027",
+    "eas": {
+      "projectId": "03828eec-314b-448d-9977-89524a70ea8c"
+    },
+    "id": "kkp",
+    "loginSSO": false,
+    "termOfUse": true,
+    "editInpro": false,
+    "todo": true,
+    "labelTodo": "To do",
+    "prefix": "Sdr. ",
+    "statusBarAuth": "dark-content",
+    "statusBarAuthtenticated": "dark-content",
+    "colors": {
+      "primary": "#323247",
+      "primaryVariant": "#f92c39",
+      "secondary": "#ffffff",
+      "tertiery": "#25282b",
+      "tertiery80": "#2E3032",
+      "tertiery70": "#5C5E61",
+      "tertiery50": "#B1B5BA",
+      "tertiery40": "#C8CCD2",
+      "tertiery20": "#F2F4F6",
+      "tertiery10": "#FFFFFF",
+      "textWhite": "#ffffff",
+      "textBlack": "#000000",
+      "active": "#25282b",
+      "disabled": "#cacccf",
+      "error80": "#FF5630",
+      "error50": "#fcc4e4",
+      "error500": "#cb012a",
+      "red": "#cb012a",
+      "gray400": "#827c8f",
+      "gray500": "#39324a",
+      "backgroundInput": "#ffffff",
+      "green": "#00883E",
+      "greenlight": "#C6E5B4",
+      "grey": "#a0a4a8",
+      "greylight": "#f0f0f0",
+      "yellow": "#fbaf18",
+      "yellowlight": "#FFF3A5",
+      "orange": "#B3641E",
+      "blue": "#0f6eb5",
+      "browhite": "#f4f4f6",
+      "purple": "#A06DDB",
+      "d_needfollowup": "#34c759",
+      "d_incoming": "#0f6eb5",
+      "d_disposition": "#cb012a",
+      "d_todo": "#A06DDB",
+      "d_secretary": "#D0A9CF",
+      "d_delegation": "#fbaf18",
+      "normal": "#25282b",
+      "high": "#cb012a",
+      "low": "#0f6eb5",
+      "warning50": "#FFB020",
+      "success50": "#52BD94",
+      "info50": "#3366FF"
+    },
+    "font": {
+      "xs": 10,
+      "sm": 12,
+      "md": 14,
+      "lg": 16,
+      "xl": 18,
+      "xxl": 20,
+      "xxxl": 22,
+      "xxxxl": 24,
+      "hd5": 28,
+      "hd4": 34,
+      "hd3": 48,
+      "hd2": 60,
+      "hd1": 72
+    }
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "cli": {
+    "version": ">= 2.1.0",
+    "appVersionSource": "local"
+  },
+  "build": {
+    "development-simulator": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "ios": {
+        "simulator": true
+      }
+    },
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "env": {
+        "SENTRY_AUTH_TOKEN": "afc791465b7811efae970242ac120024",
+        "SENTRY_ORG": "sentry",
+        "SENTRY_PROJECT": "kkp-superapps-dev",
+        "SENTRY_DISABLE_AUTO_UPLOAD": "true",
+        "SENTRY_ALLOW_FAILURE": "true",
+        "EXPO_OPTIMIZE": "true"
+      },
+      "android": {
+        "buildType": "app-bundle",
+        "image": "latest"
+      },
+      "ios": {
+        "simulator": true,
+        "enterpriseProvisioning": "adhoc"
+      },
+      "distribution": "internal"
+    },
+    "preview2": {
+      "android": {
+        "gradleCommand": ":app:assembleRelease"
+      }
+    },
+    "preview3": {
+      "developmentClient": true
+    },
+    "production": {
+      "env": {
+        "SENTRY_AUTH_TOKEN": "afc791465b7811efae970242ac120024",
+        "SENTRY_ORG": "sentry",
+        "SENTRY_PROJECT": "kkp-superapps-dev",
+        "SENTRY_DISABLE_AUTO_UPLOAD": "true",
+        "SENTRY_ALLOW_FAILURE": "true",
+        "EXPO_OPTIMIZE": "true"
+      },
+      "android": {
+        "buildType": "app-bundle",
+        "image": "latest",
+        "gradleCommand": ":app:assembleRelease"
+      },
+      "ios": {
+        "simulator": false
+      },
+      "distribution": "store"
+    }
+  },
+  "submit": {
+    "production": {
+      "ios": {
+        "appleId": "aziz@armsolusi.com",
+        "ascAppId": "6478191000",
+        "appleTeamId": "H7BL72G773"
+      }
+    }
+  }
+}
