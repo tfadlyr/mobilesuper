@@ -29,6 +29,12 @@ function MyTabDigitalSign({ props, navigation, route }) {
     } else if (route?.params?.screen === "DokumenLain") {
       setTabItemIndex(1);
       navigation.navigate("DokumenLain", { route: route });
+    } else if (route?.params?.screen === "Verifikasi") {
+      setTabItemIndex(3);
+      navigation.navigate("Verifikasi", { route: route });
+    } else if (route?.params?.screen === "DokumenMonitoring") {
+      setTabItemIndex(2);
+      navigation.navigate("DokumenMonitoring", { route: route });
     }
   }, []);
 
@@ -437,6 +443,78 @@ function MyTabDigitalSign({ props, navigation, route }) {
             )}
           </TouchableOpacity>
 
+          {/* {hasRequiredRoles(profile?.roles_access, roleLaporan) ? ( */}
+          <TouchableOpacity
+            key={2}
+            onPress={() => {
+              setTabItemIndex(2);
+              navigation.navigate("DokumenMonitoring");
+              // props.navigation.navigate('Home', { unread: false })
+            }}
+          >
+            {tabItemIndex === 2 ? (
+              <View
+                style={{
+                  alignItems: "center",
+                  height: device === "tablet" ? 100 : 65,
+                  justifyContent: "center",
+                  width: device === "tablet" ? 200 : 100,
+                }}
+              >
+                <View
+                  style={{
+                    width: "100%",
+                    height: 3,
+                    backgroundColor: COLORS.primary,
+                    position: "absolute",
+                    top: 0,
+                    //shadow ios
+                    shadowOffset: { width: -2, height: 5 },
+                    shadowColor: COLORS.primary,
+                    shadowOpacity: 0.4,
+                    //shadow android
+                    elevation: 2,
+                  }}
+                />
+                <Ionicons
+                  name="pencil-outline"
+                  color={COLORS.primary}
+                  size={device === "tablet" ? 40 : 24}
+                />
+                <Text
+                  style={{
+                    color: COLORS.primary,
+                    fontSize: fontSizeResponsive("H3", device),
+                  }}
+                >
+                  Dokumen Monitoring
+                </Text>
+              </View>
+            ) : (
+              <View
+                style={{
+                  alignItems: "center",
+                  height: device === "tablet" ? 100 : 65,
+                  justifyContent: "center",
+                  width: device === "tablet" ? 200 : 100,
+                }}
+              >
+                <Ionicons
+                  name="pencil-outline"
+                  color={COLORS.tertiary}
+                  size={device === "tablet" ? 40 : 24}
+                />
+                <Text
+                  style={{
+                    color: COLORS.tertiary,
+                    fontSize: fontSizeResponsive("H3", device),
+                  }}
+                >
+                  Dokumen Monitoring
+                </Text>
+              </View>
+            )}
+          </TouchableOpacity>
           {/* ) : null} */}
         </View>
       </BottomSheetModalProvider>

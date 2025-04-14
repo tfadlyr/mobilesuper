@@ -187,6 +187,7 @@ import { LoginIos } from "../LoginIos";
 import { RegisterIos } from "../RegisterIos";
 import { PortalIos } from "../PortalIos";
 import { DokumenLain } from "../DigitalSignature/DokumenLain";
+import { DokumenMonitoring } from "../DigitalSignature/DokumenMonitoring";
 import { Bankom } from "../DigitalSignature/Bankom";
 import { AksiPerubahan } from "../AksiPerubahan/AksiPerubahan";
 import { AksiPerubahanView } from "../AksiPerubahan/AksiPerubahanView";
@@ -979,6 +980,13 @@ function AuthenticatedStack({ route }) {
           <Stack.Screen
             name="DokumenLain"
             component={DokumenLain}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="DokumenMonitoring"
+            component={DokumenMonitoring}
             options={{
               headerShown: false,
             }}

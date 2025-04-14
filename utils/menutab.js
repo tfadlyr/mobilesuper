@@ -27,6 +27,7 @@ import { LampiranTask } from "../Apps/Task Management/DetailTask/LampiranTask";
 import MyTabDigitalSign from "../Apps/DigitalSignature/BottomTabsDigitalSign";
 import { Bankom } from "../Apps/DigitalSignature/Bankom";
 import { DokumenLain } from "../Apps/DigitalSignature/DokumenLain";
+import { DokumenMonitoring } from "../Apps/DigitalSignature/DokumenMonitoring";
 import { LaporanDigitalSign } from "../Apps/DigitalSignature/LaporanDigitalSign";
 import MyTabBarPengetahuan from "../Apps/Pengetahuan/BottomTabsPengetahuan";
 import { LiniMasa } from "../Apps/Pengetahuan/LiniMasa";
@@ -476,6 +477,11 @@ export const BottomTabsDigitalSign = ({ route }) => {
           <Tab.Screen
             name="DokumenSK"
             component={DokumenSK}
+            options={{ headerShown: false }}
+          />
+          <Tab.Screen
+            name="DokumenMonitoring"
+            component={DokumenMonitoring}
             options={{ headerShown: false }}
           />
         </Tab.Navigator>
