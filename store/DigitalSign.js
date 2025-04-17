@@ -46,6 +46,9 @@ import {
   getCounterPKRLMonitoring,
   tolakDokumenLain,
   getCounterSK,
+  getMonitorCountWeek,
+  getMonitorCountMonth,
+  getMonitorCountYear,
 } from "../service/api";
 import * as Sentry from "@sentry/react-native";
 
@@ -84,6 +87,7 @@ const DigitalSignSlice = createSlice({
     mainCounter: {},
     message: "",
     statusHapus: "",
+    monitorCount: {},
   },
   reducers: {
     setDigitalSignLists: (state, action) => {
@@ -736,7 +740,40 @@ const DigitalSignSlice = createSlice({
         state.loading = false;
         state.statusHapus = "gagal";
         Sentry.captureException(action.error);
-      });
+      })
+      .addCase(getMonitorCountWeek.fulfilled, (state, action) => {
+        state.loading = false;
+        state.monitorCount = action.payload
+      })
+      .addCase(getMonitorCountWeek.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(getMonitorCountWeek.rejected, (state, action) => {
+        state.loading = false;
+        // Sentry.captureException(action.error, "counter pkrl");
+      })
+      .addCase(getMonitorCountMonth.fulfilled, (state, action) => {
+        state.loading = false;
+        state.monitorCount = action.payload
+      })
+      .addCase(getMonitorCountMonth.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(getMonitorCountMonth.rejected, (state, action) => {
+        state.loading = false;
+        // Sentry.captureException(action.error, "counter pkrl");
+      })
+      .addCase(getMonitorCountYear.fulfilled, (state, action) => {
+        state.loading = false;
+        state.monitorCount = action.payload
+      })
+      .addCase(getMonitorCountYear.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(getMonitorCountYear.rejected, (state, action) => {
+        state.loading = false;
+        // Sentry.captureException(action.error, "counter pkrl");
+      })
   },
 });
 

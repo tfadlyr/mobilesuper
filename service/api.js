@@ -2773,6 +2773,51 @@ export const getExportPKRL = createAsyncThunk(
   }
 );
 
+export const getMonitorCountWeek = createAsyncThunk(
+  "digitalsign/getMonitorCountWeek",
+  async ({ token, date }) => {
+    const respon = await axiosInstance.get(
+      `${digitalSign}dashboard-monitor-count/?date=${date}&last_7_days=true`,
+      {
+        headers: { Authorization: token },
+      }
+    );
+    return {
+      data: respon?.data.results,
+    };
+  }
+);
+
+export const getMonitorCountMonth = createAsyncThunk(
+  "digitalsign/getMonitorCountMonth",
+  async ({ token, month }) => {
+    const respon = await axiosInstance.get(
+      `${digitalSign}dashboard-monitor-count/?monthly=${month}`,
+      {
+        headers: { Authorization: token },
+      }
+    );
+    return {
+      data: respon?.data.results,
+    };
+  }
+);
+
+export const getMonitorCountYear = createAsyncThunk(
+  "digitalsign/getMonitorCountYear",
+  async ({ token, year }) => {
+    const respon = await axiosInstance.get(
+      `${digitalSign}dashboard-monitor-count/?yearly=${year}`,
+      {
+        headers: { Authorization: token },
+      }
+    );
+    return {
+      data: respon?.data.results,
+    };
+  }
+);
+
 //Cuti
 export const getCutiPersonal = createAsyncThunk(
   "cuti/getCutiPersonal",

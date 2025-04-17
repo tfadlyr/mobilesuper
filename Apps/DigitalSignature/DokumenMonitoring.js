@@ -21,7 +21,6 @@ import {
   useNavigation,
   useNavigationState,
 } from "@react-navigation/native";
-import { Search } from "../../components/Search";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useDispatch, useSelector } from "react-redux";
 import Checkbox from "expo-checkbox";
@@ -29,14 +28,9 @@ import { useState } from "react";
 import { useEffect } from "react";
 import ListEmpty from "../../components/ListEmpty";
 import {
-  getDetailDigisign,
-  getListRejected,
-  getListComposer,
-  getListDraft,
-  getListInProgress,
-  getListSignedDigiSign,
-  deleteDokumenLain,
-  getCounterDigitalSign,
+  getMonitorCountWeek,
+  getMonitorCountMonth,
+  getMonitorCountYear,
 } from "../../service/api";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { getTokenValue } from "../../service/session";
@@ -281,9 +275,79 @@ export const DokumenMonitoring = ({ route }) => {
   const [page, setPage] = useState(10);
   const isFocus = useIsFocused();
 
-  const currentTab = useNavigationState(
-    (state) => state.routes[state.index].name
-  );
+  //YYYY-MM-DD format
+  const getCurrentDate = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  // YYYY-MM format
+  const getCurrentMonth = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    return `${year}-${month}`;
+  };
+
+  //YYYY format
+  const getCurrentYear = () => {
+    return new Date().getFullYear().toString();
+  };
+
+  const [monitorData, setMonitorData] = useState({
+    total_done: 0,
+    total_in_progress: 0,
+    percent_done: 0,
+    percent_change: 0, 
+  });
+
+  const [timeFilter, setTimeFilter] = useState("week"); // default filter: week, month, year
+  const fetchDataByTimeFilter = async () => {
+    if (!token) return;
+    
+    try {
+      let response;
+      switch(timeFilter) {
+        case "week":
+          response = await getMonitorCountWeek({ 
+            token, 
+            date: getCurrentDate()  
+          });
+          break;
+        case "month":
+          response = await getMonitorCountMonth({ 
+            token, 
+            month: getCurrentMonth()  
+          });
+          break;
+        case "year":
+          response = await getMonitorCountYear({ 
+            token, 
+            year: getCurrentYear()  
+          });
+          break;
+        default:
+          response = await getMonitorCountWeek({ 
+            token, 
+            date: getCurrentDate() 
+          });
+      }
+      
+      if (response && response.data) {
+        setMonitorData({
+          total_done: response.total_done || 0,
+          total_in_progress: response.data.total_in_progress || 0,
+          percent_done: response.data.percent_done || 0,
+          percent_change: response.data.percent_change || 0  
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching monitor data:", error);
+    }
+  };
 
   useEffect(() => {
     getTokenValue().then((val) => {
@@ -292,46 +356,57 @@ export const DokumenMonitoring = ({ route }) => {
   }, []);
 
   useEffect(() => {
-    if (token !== "") {
-      if (
-        currentTab === "DokumenLain" &&
-        routeCounter?.route?.params.screen === "DokumenLain"
-      ) {
-        SetVariant("inprogress");
-        dispatch(
-          getListInProgress({
-            token: token,
-            tipe: "dokumen_lain",
-            page: page,
-            search: search,
-          })
-        );
-        dispatch(getCounterDigitalSign({ token: token, tipe: "dokumen_lain" }));
-        navigation.setParams({ route: undefined });
-      } else if (currentTab === "DokumenLain") {
-        // dispatch(
-        //   getListComposer({
-        //     token: token,
-        //     tipe: tipe,
-        //     page: page,
-        //     search: search,
-        //   })
-        // );
-        dispatch(getCounterDigitalSign({ token: token, tipe: "dokumen_lain" }));
-      }
-      // else if (currentTab === "DokumenLain") {
-      //   dispatch(
-      //     getListComposer({
-      //       token: token,
-      //       tipe: tipe,
-      //       page: page,
-      //       search: search,
-      //     })
-      //   );
-      //   dispatch(getCounterDigitalSign({ token: token, tipe: "dokumen_lain" }));
-      // }
+    if (token) {
+      fetchDataByTimeFilter();
     }
-  }, [token, tipe, currentTab]);
+  }, [token, timeFilter]);
+
+  const currentTab = useNavigationState(
+    (state) => state.routes[state.index].name
+  );
+
+
+  // useEffect(() => {
+  //   if (token !== "") {
+  //     if (
+  //       currentTab === "DokumenLain" &&
+  //       routeCounter?.route?.params.screen === "DokumenLain"
+  //     ) {
+  //       SetVariant("inprogress");
+  //       dispatch(
+  //         getListInProgress({
+  //           token: token,
+  //           tipe: "dokumen_lain",
+  //           page: page,
+  //           search: search,
+  //         })
+  //       );
+  //       dispatch(getCounterDigitalSign({ token: token, tipe: "dokumen_lain" }));
+  //       navigation.setParams({ route: undefined });
+  //     } else if (currentTab === "DokumenLain") {
+  //       // dispatch(
+  //       //   getListComposer({
+  //       //     token: token,
+  //       //     tipe: tipe,
+  //       //     page: page,
+  //       //     search: search,
+  //       //   })
+  //       // );
+  //       dispatch(getCounterDigitalSign({ token: token, tipe: "dokumen_lain" }));
+  //     }
+  //     // else if (currentTab === "DokumenLain") {
+  //     //   dispatch(
+  //     //     getListComposer({
+  //     //       token: token,
+  //     //       tipe: tipe,
+  //     //       page: page,
+  //     //       search: search,
+  //     //     })
+  //     //   );
+  //     //   dispatch(getCounterDigitalSign({ token: token, tipe: "dokumen_lain" }));
+  //     // }
+  //   }
+  // }, [token, tipe, currentTab]);
 
   // const filterHandlerComposer = () => {
   //   SetVariant("composer");
@@ -567,6 +642,8 @@ export const DokumenMonitoring = ({ route }) => {
   const finishedPercent = total > 0 ? (finished / total) * 100 : 0;
   const unfinishedPercent = total > 0 ? (unfinished / total) * 100 : 0;
 
+
+
   //Barchart Data Test
   const barData = [
     {
@@ -655,12 +732,73 @@ export const DokumenMonitoring = ({ route }) => {
           </View>
         </View>
 
+
         <ScrollView 
           style={{ flex: 1 }}
-          contentContainerStyle={{ paddingBottom: 20 }} // Add some bottom padding
+          contentContainerStyle={{ paddingBottom: 20 }}
         >
 
+          {/* Time filter buttons */}
+          <View style={styles.filterContainer}>
+            <TouchableOpacity
+              style={[
+                styles.filterButton,
+                timeFilter === "week" && styles.activeFilterButton
+              ]}
+              onPress={() => {
+                setTimeFilter("week");
+              }}
+            >
+              <Text
+                style={[
+                  styles.filterButtonText,
+                  timeFilter === "week" && styles.activeFilterText
+                ]}
+              >
+                7 Hari
+              </Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity
+              style={[
+                styles.filterButton,
+                timeFilter === "month" && styles.activeFilterButton
+              ]}
+              onPress={() => setTimeFilter("month")}
+            >
+              <Text
+                style={[
+                  styles.filterButtonText,
+                  timeFilter === "month" && styles.activeFilterText
+                ]}
+              >
+                Bulan Ini
+              </Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity
+              style={[
+                styles.filterButton,
+                timeFilter === "year" && styles.activeFilterButton
+              ]}
+              onPress={() => setTimeFilter("year")}
+            >
+              <Text
+                style={[
+                  styles.filterButtonText,
+                  timeFilter === "year" && styles.activeFilterText
+                ]}
+              >
+                Tahun Ini
+              </Text>
+            </TouchableOpacity>
+          </View>
           
+          <Text>
+            {monitorData.total_done}
+            {timeFilter}
+          </Text>
+
           {/* Sign Status card*/}
           <View
             style={{
@@ -723,7 +861,7 @@ export const DokumenMonitoring = ({ route }) => {
                       }}
                     >
                       {/* {counterDS?.data?.dokumen_lain_count?.need_sign} */}
-                      0
+                      0 
                     </Text>
                   </View>
                 </View>
@@ -799,7 +937,7 @@ export const DokumenMonitoring = ({ route }) => {
                       }}
                     >
                       {/* {counterDS?.data?.dokumen_lain_count?.done} */}
-                      0
+                      {monitorData.total_in_progress}
                     </Text>
                   </View>
                 </View>
@@ -875,7 +1013,7 @@ export const DokumenMonitoring = ({ route }) => {
                       }}
                     >
                       {/* {counterDS?.data?.dokumen_lain_count?.done} */}
-                      2
+                      {monitorData.total_done}
                     </Text>
                   </View>
                 </View>
@@ -1282,5 +1420,35 @@ const styles = StyleSheet.create({
     borderColor: COLORS.ExtraDivinder,
     borderRadius: 8,
     backgroundColor: COLORS.white,
+  },
+  filterContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: COLORS.white,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.lighter,
+  },
+  filterButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    borderRadius: 8,
+    backgroundColor: COLORS.bgLightGrey,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: 100,
+  },
+  activeFilterButton: {
+    backgroundColor: COLORS.primary,
+  },
+  filterButtonText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: COLORS.grey,
+  },
+  activeFilterText: {
+    color: COLORS.white,
+    fontWeight: FONTWEIGHT.bold,
   },
 });
