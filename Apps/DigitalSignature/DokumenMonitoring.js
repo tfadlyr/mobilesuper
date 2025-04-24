@@ -38,6 +38,7 @@ import {
   setDigitalSignLists,
   setStatus,
   setStatusHapus,
+  setMonitorCount,
 } from "../../store/DigitalSign";
 import { Loading } from "../../components/Loading";
 import { RefreshControl } from "react-native";
@@ -297,52 +298,28 @@ export const DokumenMonitoring = ({ route }) => {
     return new Date().getFullYear().toString();
   };
 
-  const [monitorData, setMonitorData] = useState({
-    total_done: 0,
-    total_in_progress: 0,
-    percent_done: 0,
-    percent_change: 0, 
-  });
 
   const [timeFilter, setTimeFilter] = useState("week"); // default filter: week, month, year
+  // Function to fetch data based on the selected time filter
   const fetchDataByTimeFilter = async () => {
-    if (!token) return;
-    
     try {
       let response;
-      switch(timeFilter) {
+      switch (timeFilter) {
         case "week":
-          response = await getMonitorCountWeek({ 
-            token, 
-            date: getCurrentDate()  
-          });
+          response = await dispatch(getMonitorCountWeek({ token, date: getCurrentDate() }));
           break;
         case "month":
-          response = await getMonitorCountMonth({ 
-            token, 
-            month: getCurrentMonth()  
-          });
+          response = await dispatch(getMonitorCountMonth({ token, month: getCurrentMonth() }));
           break;
         case "year":
-          response = await getMonitorCountYear({ 
-            token, 
-            year: getCurrentYear()  
-          });
+          response = await dispatch(getMonitorCountYear({ token, year: getCurrentYear() }));
           break;
         default:
-          response = await getMonitorCountWeek({ 
-            token, 
-            date: getCurrentDate() 
-          });
+          response = await dispatch(getMonitorCountWeek({ token, date: getCurrentDate() }));
       }
-      
-      if (response && response.data) {
-        setMonitorData({
-          total_done: response.total_done || 0,
-          total_in_progress: response.data.total_in_progress || 0,
-          percent_done: response.data.percent_done || 0,
-          percent_change: response.data.percent_change || 0  
-        });
+      if (response && response.payload) {
+        console.log(response.payload)
+        dispatch(setMonitorCount(response.payload)); // Dispatch action to update monitorCount
       }
     } catch (error) {
       console.error("Error fetching monitor data:", error);
@@ -352,18 +329,31 @@ export const DokumenMonitoring = ({ route }) => {
   useEffect(() => {
     getTokenValue().then((val) => {
       setToken(val);
+      fetchDataByTimeFilter();
     });
   }, []);
-
   useEffect(() => {
     if (token) {
-      fetchDataByTimeFilter();
+      // fetchDataByTimeFilter();
+      dispatch(getMonitorCountWeek(token, getCurrentDate()))
     }
   }, [token, timeFilter]);
+
 
   const currentTab = useNavigationState(
     (state) => state.routes[state.index].name
   );
+
+  // const fetchData = async () => {
+  //   const resultFunction = await getMonitorCountWeek({ token, date: getCurrentDate() });
+  //   // If resultFunction is a function, call it to get the actual data
+  //   const actualResult = typeof resultFunction === 'function' ? resultFunction() : resultFunction;
+  //   console.log("Result:", actualResult);
+  //   console.log(token);
+  //   console.log(getCurrentDate());
+  // };
+  
+  // fetchData();
 
 
   // useEffect(() => {
@@ -447,10 +437,11 @@ export const DokumenMonitoring = ({ route }) => {
   //   );
   // };
 
-  const { dokumenlain, loading, counterDS, statusHapus, status } = useSelector(
+  const { dokumenlain, loading, counterDS, statusHapus, status, monitorCount } = useSelector(
     (state) => state.digitalsign
   );
 
+  console.log(monitorCount)
   // useEffect(() => {
   //   setFilterData(dokumenlain.lists);
   // }, [dokumenlain]);
@@ -795,7 +786,7 @@ export const DokumenMonitoring = ({ route }) => {
           </View>
           
           <Text>
-            {monitorData.total_done}
+            {monitorCount?.total_done}
             {timeFilter}
           </Text>
 
@@ -861,7 +852,7 @@ export const DokumenMonitoring = ({ route }) => {
                       }}
                     >
                       {/* {counterDS?.data?.dokumen_lain_count?.need_sign} */}
-                      0 
+                      {monitorCount.total_in_progress}
                     </Text>
                   </View>
                 </View>
@@ -937,7 +928,7 @@ export const DokumenMonitoring = ({ route }) => {
                       }}
                     >
                       {/* {counterDS?.data?.dokumen_lain_count?.done} */}
-                      {monitorData.total_in_progress}
+                      {monitorCount.total_in_progress}
                     </Text>
                   </View>
                 </View>
@@ -1013,7 +1004,7 @@ export const DokumenMonitoring = ({ route }) => {
                       }}
                     >
                       {/* {counterDS?.data?.dokumen_lain_count?.done} */}
-                      {monitorData.total_done}
+                      {monitorCount.total_done}
                     </Text>
                   </View>
                 </View>

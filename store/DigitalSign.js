@@ -113,6 +113,9 @@ const DigitalSignSlice = createSlice({
       // console.log("lampiran", action.payload);
       state.attachmentLampiran = [action.payload];
     },
+    setMonitorCount:  (state, action) => {
+      state.monitorCount = action.payload
+    },
     resetNomorDokPerizinan: (state, action) => {
       state.nomorDokPerizinan = action.payload;
     },
@@ -789,6 +792,7 @@ export const {
   resetList,
   resetDetail,
   setStatusHapus,
+  setMonitorCount
 } = DigitalSignSlice.actions;
 
 export default DigitalSignSlice.reducer;
