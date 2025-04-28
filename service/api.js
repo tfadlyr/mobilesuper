@@ -2782,9 +2782,9 @@ export const getMonitorCountWeek = createAsyncThunk(
         headers: { Authorization: token },
       }
     );
-    console.log('Response from getMonitorCountWeek:', response.data);
+    
     return {
-      data: respon?.data.results,
+      data: respon?.data.result,
     };
   }
 );
@@ -2798,9 +2798,9 @@ export const getMonitorCountMonth = createAsyncThunk(
         headers: { Authorization: token },
       }
     );
-    console.log('Response from getMonitorCountMonth:', response.data);
+    
     return {
-      data: respon?.data.results,
+      data: respon?.data.result,
     };
   }
 );
@@ -2814,9 +2814,9 @@ export const getMonitorCountYear = createAsyncThunk(
         headers: { Authorization: token },
       }
     );
-    console.log('Response from getMonitorCountYear:', response.data);
+
     return {
-      data: respon?.data.results,
+      data: respon?.data.result,
     };
   }
 );
